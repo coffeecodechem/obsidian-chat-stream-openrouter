@@ -1,6 +1,7 @@
-# Chat Stream 	🔀
+# Chat Stream via OpenRouter 	🔀
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rpggio/obsidian-chat-stream?style=for-the-badge&sort=semver) [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22chat-stream%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&style=for-the-badge)](https://obsidian.md/plugins?search=chat%20stream)
 
+[A hard-coded fork of [rpggio/obsidian-chat-stream](https://github.com/rpggio/obsidian-chat-stream) to use OpenRouter instead of OpenAI. Tiktoken deleted, so far so good.]
 An Obsidian plugin for conversing with GPT AI via canvas notes. Ancestor notes/files are included in the chat context. You can quickly create chat streams, and control what other notes are sent to the AI.
 
 <img src="static/chat-stream-example.gif"/>
