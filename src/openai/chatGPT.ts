@@ -1,52 +1,24 @@
 import { request, RequestUrlParam } from 'obsidian'
 import { openai } from './chatGPT-types'
 
-export const OPENAI_COMPLETIONS_URL = `https://api.openai.com/v1/chat/completions`
+export const OPENAI_COMPLETIONS_URL = `https://openrouter.ai/api/v1/chat/completions`
 
 export const CHAT_MODELS = {
 	GPT_35_TURBO: {
-		name: 'gpt-3.5-turbo',
-		tokenLimit: 4096
-	},
-	GPT_35_TURBO_0125: {
-		name: 'gpt-3.5-turbo-0125',
+		name: 'openai/gpt-3.5-turbo',
 		tokenLimit: 16385
 	},
-	GPT_35_16K: {
-		name: 'gpt-3.5-turbo-16k',
-		tokenLimit: 16385
+	CLAUDE_3_HAIKU: {
+		name: 'anthropic/claude-3-haiku',
+		tokenLimit: 200000
 	},
-	GPT_35_TURBO_1106: {
-		name: 'gpt-3.5-turbo-1106',
-		tokenLimit: 16385
+	GPT_4O: {
+		name: 'openai/gpt-4o',
+		tokenLimit: 128000
 	},
-	GPT_4: {
-		name: 'gpt-4',
+	LLAMA_3_80B: {
+		name: 'meta-llama/llama-3-8b',
 		tokenLimit: 8192
-	},
-	GPT_4_TURBO_PREVIEW: {
-		name: 'gpt-4-turbo-preview',
-		tokenLimit: 128000
-	},
-	GPT_4_0125_PREVIEW: {
-		name: 'gpt-4-0125-preview',
-		tokenLimit: 128000
-	},
-	GPT_4_1106_PREVIEW: {
-		name: 'gpt-4-1106-preview',
-		tokenLimit: 128000
-	},
-	GPT_4_0613: {
-		name: 'gpt-4-0613',
-		tokenLimit: 8192
-	},
-	GPT_4_32K: {
-		name: 'gpt-4-32k',
-		tokenLimit: 32768
-	},
-	GPT_4_32K_0613: {
-		name: 'gpt-4-32k-0613',
-		tokenLimit: 32768
 	}
 } as const
 
@@ -60,7 +32,7 @@ export function chatModelByName(name: string) {
 
 export const defaultChatGPTSettings: Partial<openai.CreateChatCompletionRequest> =
 {
-	model: CHAT_MODELS.GPT_35_TURBO.name,
+	model: CHAT_MODELS.CLAUDE_3_HAIKU.name,
 	max_tokens: 500,
 	temperature: 0,
 	top_p: 1.0,
@@ -106,6 +78,10 @@ export async function getChatGPTCompletion(
 			if (err.code === 429) {
 				console.error(
 					'OpenAI API rate limit exceeded. If you have free account, your credits may have been consumed or expired.'
+				)
+			} else {
+				console.error(
+					'Another error... Dunno'
 				)
 			}
 		})

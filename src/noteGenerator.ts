@@ -1,4 +1,3 @@
-import { TiktokenModel, encodingForModel } from 'js-tiktoken'
 import { App, ItemView, Notice } from 'obsidian'
 import { CanvasNode } from './obsidian/canvas-internal'
 import { CanvasView, calcHeight, createNode } from './obsidian/canvas-patches'
@@ -103,9 +102,6 @@ export function noteGenerator(
 	}
 
 	const buildMessages = async (node: CanvasNode) => {
-		const encoding = encodingForModel(
-			(settings.apiModel || DEFAULT_SETTINGS.apiModel) as TiktokenModel
-		)
 
 		const messages: openai.ChatCompletionRequestMessage[] = []
 		let tokenCount = 0
@@ -113,9 +109,7 @@ export function noteGenerator(
 		// Note: We are not checking for system prompt longer than context window.
 		// That scenario makes no sense, though.
 		const systemPrompt = await getSystemPrompt(node)
-		if (systemPrompt) {
-			tokenCount += encoding.encode(systemPrompt).length
-		}
+
 
 		const visit = async (node: CanvasNode, depth: number) => {
 			if (settings.maxDepth && depth > settings.maxDepth) return false
@@ -128,28 +122,6 @@ export function noteGenerator(
 
 			if (nodeText) {
 				if (isSystemPromptNode(nodeText)) return true
-
-				let nodeTokens = encoding.encode(nodeText)
-				let keptNodeTokens: number
-
-				if (tokenCount + nodeTokens.length > inputLimit) {
-					// will exceed input limit
-
-					shouldContinue = false
-
-					// Leaving one token margin, just in case
-					const keepTokens = nodeTokens.slice(0, inputLimit - tokenCount - 1)
-					const truncateTextTo = encoding.decode(keepTokens).length
-					logDebug(
-						`Truncating node text from ${nodeText.length} to ${truncateTextTo} characters`
-					)
-					nodeText = nodeText.slice(0, truncateTextTo)
-					keptNodeTokens = keepTokens.length
-				} else {
-					keptNodeTokens = nodeTokens.length
-				}
-
-				tokenCount += keptNodeTokens
 
 				const role: openai.ChatCompletionRequestMessageRoleEnum =
 					nodeData.chat_role === 'assistant' ? 'assistant' : 'user'
@@ -276,7 +248,7 @@ export function noteGenerator(
 }
 
 function getTokenLimit(settings: ChatStreamSettings) {
-	const model = chatModelByName(settings.apiModel) || CHAT_MODELS.GPT_35_TURBO_0125
+	const model = chatModelByName(settings.apiModel) || CHAT_MODELS.CLAUDE_3_HAIKU
 	return settings.maxInputTokens
 		? Math.min(settings.maxInputTokens, model.tokenLimit)
 		: model.tokenLimit

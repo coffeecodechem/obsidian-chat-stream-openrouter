@@ -3,8 +3,8 @@
 	"name": "Chat Stream",
 	"version": "1.4.6",
 	"minAppVersion": "1.1.10",
-	"description": "Create branching GPT chats using canvas notes.",
-	"author": "Ryan P Smith",
+	"description": "[OpenRouter hard-code fork] Create branching GPT chats using canvas notes.",
+	"author": "Ryan P Smith, fork by CCC",
 	"authorUrl": "https://github.com/rpggio",
 	"isDesktopOnly": true,
 	"fundingUrl": {
